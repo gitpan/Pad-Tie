@@ -8,7 +8,7 @@ use Data::OptList;
 use Module::Pluggable require => 1;
 use Carp ();
 
-our $VERSION = '0.002_01';
+our $VERSION = '0.002_02';
 my %METHOD;
 
 sub new {
@@ -92,7 +92,7 @@ Pad::Tie - tie an object to lexical contexts
 
 =head1 VERSION
 
- Version 0.002_01
+ Version 0.002_02
 
 =head1 SYNOPSIS
 
@@ -237,32 +237,6 @@ need to pass an explicit C<undef> value.  See L</SYNOPSIS>.
 More detail about methods and personalities is given above.  See
 L<DESCRIPTION|/DESCRIPTION>.
 
-=cut 
-
-=begin later
-
-Some extra options may be passed in as a third hashref argument to C<new>:
-
-=over 
-
-=item * context_name
-
-Sets the context name used by Lexical::Persistence.  By default, the bound object's
-methods are available in the C<_> context (C<$foo>).  Pass in this option to
-give them a different prefix, e.g. C<$self_foo>.  See
-L<Lexical::Persistence/set_context>.
-
-=item * cache
-
-Determines whether or not to cache the results of method calls within a single
-method call.  The default is true; pass in a false value to disable result
-caching.  Note that this only affects a limited number of method personalities;
-see the individual plugins' documentation for details.
-
-=back
-
-=end
-
 =head1 METHODS
 
 Most of the time you will only need to use C<new> and C<call>, or perhaps
@@ -296,6 +270,10 @@ having to type a bunch.
 e.g. L<Rose::Object::MakeMethods::Generic|Rose::Object::MakeMethods::Generic>'s
 different kinds of hash/array accessors, a scalar that calls different methods
 for FETCH and STORE (C<$url> in examples/mech.pl).
+
+=item * more options
+
+interface for configuring the underlying Lexical::Persistence object
 
 =head1 SEE ALSO
 
