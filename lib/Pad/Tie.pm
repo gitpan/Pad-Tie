@@ -8,7 +8,7 @@ use Data::OptList;
 use Module::Pluggable require => 1;
 use Carp ();
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 my %METHOD;
 
 sub new {
@@ -75,13 +75,14 @@ sub wrap {
 1;
 
 __END__
+
 =head1 NAME
 
 Pad::Tie - tie an object to lexical contexts
 
 =head1 VERSION
 
- Version 0.001
+ Version 0.002
 
 =head1 SYNOPSIS
 
