@@ -1,11 +1,12 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Pad-Tie
-version:      0.002
+version:      0.002_01
 version_from: lib/Pad/Tie.pm
 installdirs:  site
 requires:
     Data::OptList:                 0.101
+    Devel::LexAlias:               0.04
     Lexical::Persistence:          0.97
     Module::Pluggable:             3.1
     Test::More:                    0

@@ -1,5 +1,8 @@
 Revision history for Perl extension Pad::Tie
 
+0.002_01
+        add scalar_attr and horrible pre_call mechanism -- hdp
+
 0.002   2007-04-24
         'pod is so goofy' -- rjbs (-- hdp)
 

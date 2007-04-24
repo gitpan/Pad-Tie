@@ -29,7 +29,7 @@ sub hash {
 }
 
 {
-  my ($self, $foo, @bar, @list, %hash);
+  my ($self, $foo, @bar, @list, %hash, $color);
 
   sub test_self {
     isa_ok $self, 'PT';
@@ -37,14 +37,21 @@ sub hash {
     push @{ $self->bar }, 1, 5, 17;
     $self->hash->{one} = 1;
     $self->hash->{two} = 2;
+    $self->{color} = 'red';
   }
 
   sub test_scalar {
-    my ($ref) = @_;
     is $foo, 'pony', "scalar content";
     is $self->scalar_foo, 'pony', 'self->content';
     $foo = 13;
     is $self->scalar_foo, 13, 'self->content after write';
+  }
+
+  sub test_scalar_attr {
+    is $color, 'red', 'scalar attr content';
+    is $self->{color}, 'red', 'self->content';
+    $color = 'blue';
+    is $self->{color}, 'blue', 'self->content after write';
   }
   
   sub test_array_ref {
@@ -61,7 +68,6 @@ sub hash {
   sub test_list {
     @{$self->bar} = qw(your face);
     is_deeply [ @list ], [ qw(your face) ], "content from list";
-    #local $TODO = "reading should not write";
     is_deeply [ $self->bar_list ], [ qw(your face) ], "self->content";
     # XXX test unsupported behavior: push, shift, etc.
     is @list, 2, "list size unchanged by read";
@@ -92,6 +98,9 @@ my $pad_tie = Pad::Tie->new(
     scalar => [
       scalar_foo => { -as => 'foo' }
     ],
+    scalar_attr => [
+      'color',
+    ],
     array_ref => [ 'bar' ],
     hash_ref  => [ 'hash' ],
     list      => [ bar_list => { -as => 'list' } ],
@@ -104,6 +113,8 @@ isa_ok $pad_tie, 'Pad::Tie';
 $pad_tie->call(\&PT::test_self);
 
 $pad_tie->call(\&PT::test_scalar);
+
+$pad_tie->call(\&PT::test_scalar_attr);
 
 $pad_tie->call(\&PT::test_array_ref);
 

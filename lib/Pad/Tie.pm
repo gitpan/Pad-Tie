@@ -3,12 +3,12 @@ use warnings;
 
 package Pad::Tie;
 
-use Lexical::Persistence;
+use Pad::Tie::LP;
 use Data::OptList;
 use Module::Pluggable require => 1;
 use Carp ();
 
-our $VERSION = '0.002';
+our $VERSION = '0.002_01';
 my %METHOD;
 
 sub new {
@@ -18,7 +18,8 @@ sub new {
   my $self = bless {
     invocant => $invocant,
     methods  => $methods,
-    persist  => Lexical::Persistence->new,
+    persist  => Pad::Tie::LP->new,
+    pre_call => [],
   } => $class;
   $self->build_context;
   #tie %{ $self->{context} }, 'Pad::Tie::Context', $self;
@@ -38,16 +39,24 @@ sub build_methods {
 
 sub build_context {
   my $self = shift;
+  my $methods = shift || $self->{methods};
   $self->{context} ||= {};
   $self->build_methods unless %METHOD;
-  for (@{ $self->{methods} }) {
+  for (@$methods) {
     my ($method_personality, $plugin_arg) = @$_;
     Carp::confess "unhandled method personality: $method_personality"
       unless $METHOD{$method_personality};
-    $METHOD{$method_personality}->$method_personality(
+    my $plugin = $METHOD{$method_personality};
+    my $rv = $plugin->$method_personality(
       $self->{context},
       $self->{invocant}, $plugin_arg,
-    ),
+    ) || {};
+    # XXX I hate this but I can't think of a better way to do it offhand.
+    # if you aren't me, don't use this; talk to me about it instead. -- hdp,
+    # 2007-04-24
+    if ($rv->{pre_call}) {
+      push @{ $self->{pre_call} }, @{ $rv->{pre_call} };
+    }
   }
 }
 
@@ -64,6 +73,7 @@ sub clone {
 
 sub call {
   my ($self, $code, @args) = @_;
+  $_->($self, $code, \@args) for @{ $self->{pre_call} };
   return $self->{persist}->call($code, @args);
 }
 
@@ -82,7 +92,7 @@ Pad::Tie - tie an object to lexical contexts
 
 =head1 VERSION
 
- Version 0.002
+ Version 0.002_01
 
 =head1 SYNOPSIS
 

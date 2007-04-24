@@ -14,6 +14,7 @@ WriteMakefile(
     'Data::OptList'        => '0.101',
     'Lexical::Persistence' => '0.97',
     'Module::Pluggable'    => '3.1',
+    'Devel::LexAlias'      => '0.04',
   },
   dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
   clean => { FILES    => 'Pad-Tie-*' },
