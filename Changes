@@ -1,13 +1,11 @@
 Revision history for Perl extension Pad::Tie
 
-0.002_02
-        fix pod, add to TODO -- hdp
+0.003   2007-04-24 hdp
+        fix pod, add to TODO
+        add scalar_attr and unfortunate pre_call mechanism
 
-0.002_01
-        add scalar_attr and horrible pre_call mechanism -- hdp
+0.002   2007-04-24 hdp
+        'pod is so goofy' -- rjbs 
 
-0.002   2007-04-24
-        'pod is so goofy' -- rjbs (-- hdp)
-
-0.001   2007-04-24
-        original version -- hdp
+0.001   2007-04-24 hdp
+        original version
