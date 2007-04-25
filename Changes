@@ -1,5 +1,9 @@
 Revision history for Perl extension Pad::Tie
 
+0.005   2007-04-25 hdp
+        autovivify hash and array attrs
+        fix test collision
+
 0.004   2007-04-25 hdp
         add array_attr, hash_attr, base hash object attr plugin
         don't load plugins under Plugin::Base::

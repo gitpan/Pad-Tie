@@ -15,7 +15,7 @@ sub hash_attr {
 
 sub ref_for_attr {
   my ($plugin, $ctx, $self, $arg) = @_;
-  return $self->{invocant}->{$arg->{method}};
+  return $self->{invocant}->{$arg->{method}} ||= {};
 }
 
 1;

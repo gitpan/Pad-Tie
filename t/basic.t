@@ -30,7 +30,7 @@ sub hash {
 
 {
   my ($self, $foo, @bar, @list, %hash, $color);
-  my @bar_attr;
+  my (@bar_attr, %hash_attr);;
 
   sub test_self {
     isa_ok $self, 'PT';
@@ -67,6 +67,7 @@ sub hash {
   }
 
   sub test_array_attr {
+    is_deeply $self->{bar}, [], "empty but existing arrayref";
     # assigning $self->{bar} = [ ... ] would break the binding
     @{$self->{bar}} = qw(lions tigers bears);
     is_deeply \@bar_attr, [ qw(lions tigers bears) ], "oh my";
@@ -100,15 +101,16 @@ sub hash {
   }
 
   sub test_hash_attr {
+    is_deeply $self->{hash}, {}, "empty but existing hashref";
     %{ $self->{hash} } = (
       apples => 3,
       oranges => 17,
     );
-    is_deeply \%hash, { apples => 3, oranges => 17 },
+    is_deeply \%hash_attr, { apples => 3, oranges => 17 },
       "correct produce";
-    delete $hash{apples};
+    delete $hash_attr{apples};
     ok ! exists $self->{hash}->{apples}, "apples are gone";
-    $hash{bananas}++;
+    $hash_attr{bananas}++;
     is $self->{hash}->{bananas}, 1, "we have one banana";
   }
 }
@@ -148,11 +150,13 @@ $pad_tie->call(\&PT::test_scalar_attr);
 
 $pad_tie->call(\&PT::test_array_ref);
 
+delete $obj->{bar};
 $pad_tie->call(\&PT::test_array_attr);
 
 $pad_tie->call(\&PT::test_list);
   
 $pad_tie->call(\&PT::test_hash_ref);
 
+delete $obj->{hash};
 $pad_tie->call(\&PT::test_hash_attr);
 

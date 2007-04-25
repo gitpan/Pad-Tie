@@ -11,7 +11,7 @@ use Module::Pluggable (
 );
 use Carp ();
 
-our $VERSION = '0.004';
+our $VERSION = '0.005';
 my %METHOD;
 
 sub new {
@@ -95,7 +95,7 @@ Pad::Tie - tie an object to lexical contexts
 
 =head1 VERSION
 
- Version 0.004
+ Version 0.005
 
 =head1 SYNOPSIS
 
