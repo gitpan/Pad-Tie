@@ -4,6 +4,11 @@ use warnings;
 package Pad::Tie::Plugin;
 
 use Data::OptList;
+use Carp ();
+
+sub provides {
+  Carp::confess "subclass $_[0] did not override virtual method 'provides'";
+}
 
 # input: ( [ foo => { -as => 'bar' } ], ... )
 # return: { foo => 'bar', ... }

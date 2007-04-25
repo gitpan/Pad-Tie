@@ -30,11 +30,11 @@ sub hash {
 
 {
   my ($self, $foo, @bar, @list, %hash, $color);
+  my @bar_attr;
 
   sub test_self {
     isa_ok $self, 'PT';
     $self->scalar_foo("pony");
-    push @{ $self->bar }, 1, 5, 17;
     $self->hash->{one} = 1;
     $self->hash->{two} = 2;
     $self->{color} = 'red';
@@ -55,6 +55,7 @@ sub hash {
   }
   
   sub test_array_ref {
+    @{ $self->bar } = (1, 5, 17);
     is_deeply \@bar, [ 1, 5, 17 ], "array_ref content";
     unshift @bar, 23;
     is_deeply $self->bar, [ 23, 1, 5, 17 ], "self->content after write";
@@ -63,6 +64,16 @@ sub hash {
     is_deeply $self->bar, [ qw(cheez doodle) ], "self->content after write";
     shift @{ $self->bar };
     is_deeply \@bar, [ qw(doodle) ], "array_ref content after write";
+  }
+
+  sub test_array_attr {
+    # assigning $self->{bar} = [ ... ] would break the binding
+    @{$self->{bar}} = qw(lions tigers bears);
+    is_deeply \@bar_attr, [ qw(lions tigers bears) ], "oh my";
+    is pop @bar_attr, 'bears', "phew, no more bears";
+    is_deeply $self->{bar}, [ qw(lions tigers) ], "only felines";
+    @bar_attr = qw(dogs cats);
+    is_deeply $self->{bar}, [ qw(dogs cats) ], "mass hysteria";
   }
 
   sub test_list {
@@ -87,6 +98,19 @@ sub hash {
     delete $hash{one};
     ok ! exists $self->{hash}->{one};
   }
+
+  sub test_hash_attr {
+    %{ $self->{hash} } = (
+      apples => 3,
+      oranges => 17,
+    );
+    is_deeply \%hash, { apples => 3, oranges => 17 },
+      "correct produce";
+    delete $hash{apples};
+    ok ! exists $self->{hash}->{apples}, "apples are gone";
+    $hash{bananas}++;
+    is $self->{hash}->{bananas}, 1, "we have one banana";
+  }
 }
 
 package main;
@@ -102,7 +126,13 @@ my $pad_tie = Pad::Tie->new(
       'color',
     ],
     array_ref => [ 'bar' ],
+    array_attr => [
+      bar => { -as => 'bar_attr' },
+    ],
     hash_ref  => [ 'hash' ],
+    hash_attr => [
+      hash => { -as => 'hash_attr' },
+    ],
     list      => [ bar_list => { -as => 'list' } ],
     'self',
   ],
@@ -118,7 +148,11 @@ $pad_tie->call(\&PT::test_scalar_attr);
 
 $pad_tie->call(\&PT::test_array_ref);
 
+$pad_tie->call(\&PT::test_array_attr);
+
 $pad_tie->call(\&PT::test_list);
   
 $pad_tie->call(\&PT::test_hash_ref);
+
+$pad_tie->call(\&PT::test_hash_attr);
 

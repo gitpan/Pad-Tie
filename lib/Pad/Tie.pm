@@ -5,10 +5,13 @@ package Pad::Tie;
 
 use Pad::Tie::LP;
 use Data::OptList;
-use Module::Pluggable require => 1;
+use Module::Pluggable (
+  require => 1,
+  except => qr/^Pad::Tie::Plugin::Base::/,
+);
 use Carp ();
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 my %METHOD;
 
 sub new {
@@ -92,7 +95,7 @@ Pad::Tie - tie an object to lexical contexts
 
 =head1 VERSION
 
- Version 0.003
+ Version 0.004
 
 =head1 SYNOPSIS
 
