@@ -160,3 +160,10 @@ $pad_tie->call(\&PT::test_hash_ref);
 delete $obj->{hash};
 $pad_tie->call(\&PT::test_hash_attr);
 
+{
+  local $SIG{__WARN__} = sub {
+    unlike $_[0], qr/Odd number of elements/,
+      "no odd elements warning";
+  };
+  $pad_tie->call(sub { is @_, 1, "got 1 arg" }, 1);
+}

@@ -17,4 +17,10 @@ sub parse_variable {
   return ($sigil, $context, $member);
 }
 
+# don't actually ever push arg context
+sub push_arg_context { shift->get_context("arg") }
+
+# no-op, since we never changed it to begin with
+sub pop_arg_context { () }
+
 1;

@@ -11,7 +11,7 @@ use Module::Pluggable (
 );
 use Carp ();
 
-our $VERSION = '0.005';
+our $VERSION = '0.006';
 my %METHOD;
 
 sub new {
@@ -95,7 +95,7 @@ Pad::Tie - tie an object to lexical contexts
 
 =head1 VERSION
 
- Version 0.005
+ Version 0.006
 
 =head1 SYNOPSIS
 
@@ -277,6 +277,10 @@ for FETCH and STORE (C<$url> in examples/mech.pl).
 =item * more options
 
 interface for configuring the underlying Lexical::Persistence object
+
+=item * more documentation
+
+examples that aren't filled with 'foo', documentation on plugins
 
 =head1 SEE ALSO
 
